@@ -10,6 +10,7 @@ class SprintsController < ApplicationController
   def create
     @sprint = Sprint.new(permitted_params)
     if @sprint.save
+      CreateMeetings.new(@sprint).run
       flash[:notice] = 'perfect'
       redirect_to sprints_path
     else
