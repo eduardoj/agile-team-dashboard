@@ -38,7 +38,7 @@
             strong= @pull_requests.count
             |  Opened Pull Requests
           .ui.relaxed.divided.list.attached.segment.pull_requests
-            - @pull_requests.reverse_each do |pr|
+            - @pull_requests.each do |pr|
                 .item
                   = gravatar pr.gravatar
                   .content
