@@ -13,40 +13,46 @@ class CreateMeetings
 
   def create_standup(start_date, end_date)
     (start_date..end_date).each do |date|
-      if !is_weekend?(date)
-        Meeting.create(name: 'standup', event_type: :standup, start_date: date, end_date: date, location: 'mumble')
+      if !weekend?(date)
+        Meeting.create(name: 'Standup', event_type: :standup, start_date: datetime(date, '11:00'),
+                       end_date: datetime(date, '11:30'), location: 'mumble')
       end
     end
   end
 
   def create_planning(date)
-    Meeting.create(name: 'planning', event_type: :planning, start_date: date, end_date: date, location: 'gotomeeting')
-    Meeting.create(name: 'planning', event_type: :planning, start_date: date, end_date: date, location: 'gotomeeting')
+    Meeting.create(name: 'Planning part 1', event_type: :planning, start_date: datetime(date, '11:00'),
+                   end_date: datetime(date, '12:00'), location: 'gotomeeting')
+    Meeting.create(name: 'Planning part 2', event_type: :planning, start_date: datetime(date, '13:30'),
+                   end_date: datetime(date, '15:30'), location: 'gotomeeting')
   end
 
   def create_grooming(start_date, end_date)
     (start_date..end_date).each do |date|
-      if is_monday?(date)
-        Meeting.create(name: 'grooming', event_type: :grooming, start_date: date, end_date: date, location: 'gotomeeting')
+      if date.monday?
+        Meeting.create(name: 'Grooming', event_type: :grooming, start_date: datetime(date, '14:00'),
+                       end_date: datetime(date, '16:00'), location: 'gotomeeting')
       end
     end
   end
 
   def create_review(date)
-    Meeting.create(name: 'planning', event_type: :planning, start_date: date, end_date: date, location: 'gotomeeting')
+    Meeting.create(name: 'Review', event_type: :review, start_date: datetime(date, '11:00'),
+                   end_date: datetime(date, '12:00'), location: 'gotomeeting')
   end
 
   def create_retrospective(date)
-    Meeting.create(name: 'retrospective', event_type: :retrospective, start_date: date, end_date: date, location: 'mumble')
+    Meeting.create(name: 'Retrospective', event_type: :retrospective, start_date: datetime(date, '14:00'),
+                   end_date: datetime(date, '16:00'), location: 'mumble')
   end
 
   private
 
-  def is_weekend?(date)
+  def weekend?(date)
     [0,6,7].include?(date.wday)
   end
 
-  def is_monday?(date)
-    date.wday == 1
+  def datetime(date, time)
+    [date,time].join(' ').to_datetime
   end
 end

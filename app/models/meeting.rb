@@ -2,6 +2,11 @@ class Meeting < Event
   validates :location, :start_date, :end_date, :event_type, presence: true
 
   scope :today, (-> { where('DATE(start_date) = ?', Time.zone.today).order(start_date: :asc) })
+  scope :this_week, (-> do
+    where('DATE(start_date) >= ? AND DATE(end_date) <= ?',
+          Time.zone.today.beginning_of_week,
+          Time.zone.today.end_of_week).order(start_date: :asc)
+  end)
   scope :active, (-> do
     where('DATE(start_date) >= :today OR DATE(end_date) >= :today', today: Time.zone.today)
       .order(start_date: :asc)
@@ -10,7 +15,7 @@ class Meeting < Event
 
   # Contants
   #
-  TYPES = %i[standup planning retrospective meeting workshop other].freeze
+  TYPES = %i[standup planning review retrospective meeting workshop other].freeze
 end
 
 # == Schema Information
