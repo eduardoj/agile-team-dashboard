@@ -15,12 +15,17 @@ module ApplicationHelper
     end
   end
 
-  def avatar
-    if current_user.github_login
-      url = "https://github.com/#{current_user.github_login}.png?size=200"
-      image_tag url, class: 'ui fluid circular image'
+  def avatar(user, size: 200, gravatar: false)
+    if gravatar
+      klass = 'ui avatar image mini'
     else
-      image_tag Identicon.data_url_for(current_user.email), class: 'ui fluid circular image'
+      klass = 'ui fluid circular image'
+    end
+    if user.github_login
+      url = "https://github.com/#{user.github_login}.png?size=#{size}"
+      image_tag url, class: klass
+    else
+      image_tag Identicon.data_url_for(user.email), class: klass
     end
   end
 end
